@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.stream.Collectors;
 
 // Stub
 @Repository
@@ -20,11 +21,17 @@ public class PostRepository {
     public List<Post> all() {
         if (posts.isEmpty())
             return new ArrayList<>();
-        return new ArrayList<>(posts.values());
+        return posts
+                .values()
+                .stream()
+                .filter(x -> !x.getRemoved())
+                .collect(Collectors.toList());
     }
 
     public Optional<Post> getById(long id) {
-        return Optional.ofNullable(posts.get(id));
+        final Post post = posts.get(id);
+        if (post != null && !post.getRemoved()) return Optional.of(post);
+        throw new NotFoundException("Can't read. There is no post with id " + id);
     }
 
     public Post save(Post post) {
@@ -35,7 +42,7 @@ public class PostRepository {
             posts.put(nextId, newPost);
             return newPost;
         } else {
-            if (posts.containsKey(id)) {
+            if (posts.containsKey(id) && !posts.get(id).getRemoved()) {
                 posts.put(id, post);
                 return post;
             }
@@ -44,6 +51,7 @@ public class PostRepository {
     }
 
     public void removeById(long id) {
-        posts.remove(id);
+        final Post post = posts.get(id);
+        if (post != null) post.setRemoved(true);
     }
 }
