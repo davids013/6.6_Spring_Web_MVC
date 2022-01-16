@@ -52,6 +52,8 @@ public class PostRepository {
 
     public void removeById(long id) {
         final Post post = posts.get(id);
-        if (post != null) post.setRemoved(true);
+        if (post != null && !post.getRemoved()) {
+            post.setRemoved(true);
+        } else throw new NotFoundException("Can't remove. There is no post with id " + id);
     }
 }
