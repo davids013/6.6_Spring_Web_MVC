@@ -2,7 +2,7 @@ package ru.netology.controller;
 
 import org.springframework.web.bind.annotation.*;
 import ru.netology.model.Post;
-import ru.netology.model.VisiblePost;
+import ru.netology.model.PostDTO;
 import ru.netology.service.PostService;
 
 import java.util.List;
@@ -18,17 +18,17 @@ public class PostController {
     }
 
     @GetMapping
-    public List<VisiblePost> all() {
+    public List<PostDTO> all() {
         return service.all();
     }
 
     @GetMapping("/{id}")
-    public VisiblePost getById(@PathVariable long id) {
+    public PostDTO getById(@PathVariable long id) {
         return service.getById(id);
     }
 
     @PostMapping
-    public VisiblePost save(@RequestBody Post post) {
+    public PostDTO save(@RequestBody Post post) {
         return service.save(post);
     }
 

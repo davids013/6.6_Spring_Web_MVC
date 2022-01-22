@@ -1,10 +1,10 @@
 package ru.netology.model;
 
-public class VisiblePost {
+public class PostDTO {
     private final long id;
     private final String content;
 
-    public VisiblePost(Post post) {
+    public PostDTO(Post post) {
         this.id = post.getId();
         this.content = post.getContent();
     }
